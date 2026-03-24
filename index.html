@@ -1,372 +1,619 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Your Connection - WhatsApp Matching</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DatingVIP - Exclusive Access</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💞</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#1a1a2e;overflow:hidden;height:100vh;color:#fff;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .bg-video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;width:100%;height:100%;transform:translate(-50%,-50%);z-index:-2;object-fit:cover;pointer-events:none}
-        .blur-content{background:rgba(26,26,46,0.6); backdrop-filter:blur(4px);height:100vh;display:flex;flex-direction:column;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .whatsapp-header{display:flex;align-items:center;padding:15px;background:#e91e63;color:#fff;position:relative;z-index:1;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .back-button{font-size:22px;cursor:pointer;margin-right:15px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .header-text h1{font-size:19px;font-weight:500;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .header-text p{font-size:14px;opacity:0.8;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .main-content{
-            flex:1;
-            display:flex;
-            flex-direction:column;
-            justify-content:space-between;
-            padding:20px 20px 10px;
-            align-items:center;
-            text-align:center;
-            -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+        :root {
+            /* TEMA BARU: MIDNIGHT VIOLET */
+            --primary: #8B5CF6;       /* Ungu Utama */
+            --primary-dark: #7C3AED;
+            --secondary: #EC4899;     /* Pink Aksen */
+            --accent: #F59E0B;
+            --bg-body: #05050A;       /* Hampir Hitam */
+            --bg-panel: #0F0F16;      /* Dark Panel */
+            --bg-panel-hover: #1A1A24;
+            --border: rgba(139, 92, 246, 0.15);
+            --text: #E2E8F0;
+            --text-muted: #94A3B8;
+            --online: #10B981;
+            --gradient-main: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
         }
-        .profile-container,.members-info,.notification,.join-button{opacity:0;transform:translateY(20px);transition:all .5s;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .profile-img{background:#e91e63;width:100px;height:100px;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 4px 20px rgba(233,30,99,0.4);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .profile-img img{width:100%;height:100%;object-fit:cover;}
-        .group-name{font-size:22px;font-weight:600;margin-bottom:8px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .group-info{font-size:14px;opacity:0.8;margin-bottom:20px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .members-info{display:flex;justify-content:space-around;width:100%;max-width:400px;margin:25px 0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .member-count,.active-members{text-align:center;cursor:pointer;position:relative;flex:1;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .count{font-size:26px;font-weight:bold;margin:8px 0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .label{font-size:14px;opacity:0.8;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .online-indicator{display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:5px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .dot{width:8px;height:8px;background:#ff4081;border-radius:50%;margin-right:6px;animation:pulse 2s infinite}
-        @keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
-        .notification{background:rgba(255,255,255,0.15);padding:12px;border-radius:8px;font-size:14px;margin:20px 0;line-height:1.5;width:100%;max-width:400px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .join-button{
-            background:#ff4081;color:#fff;border:none;padding:18px 30px;font-size:18px;border-radius:50px;cursor:pointer;
-            display:flex;align-items:center;justify-content:center;gap:12px;margin:15px auto 0;
-            width:90%;max-width:400px;font-weight:bold;box-shadow:0 6px 20px rgba(255,64,129,0.4);
-            -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-        .join-button i{font-size:26px}
-        .join-button:disabled{opacity:0.7;cursor:not-allowed}
-        .security-notice{text-align:center;font-size:13px;opacity:0.7;margin:10px 0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .footer{text-align:center;font-size:12px;padding:12px;background:rgba(0,0,0,0.4);line-height:1.5;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .message-popup{position:absolute;background:#000;color:#fff;padding:8px 12px;border-radius:6px;font-size:13px;white-space:nowrap;
-            bottom:100%;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .3s;z-index:10;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-        .message-popup::after{content:"";position:absolute;top:100%;left:50%;margin-left:-8px;border:8px solid transparent;border-top-color:#000}
-        .show{opacity:1}
-        .feature-list{display:flex;justify-content:center;gap:15px;margin:15px 0;}
-        .feature-item{display:flex;flex-direction:column;align-items:center;opacity:0.8;cursor:pointer;transition:all 0.3s ease;padding:10px;border-radius:10px;}
-        .feature-item:hover{opacity:1;transform:scale(1.05);}
-        .feature-item i{font-size:24px;margin-bottom:5px;}
 
-        /* Direct Chat - Green/Blue */
-        #directChat{border:1px solid rgba(76,175,80,0.3);}
-        #directChat:hover{background:rgba(76,175,80,0.2);}
-        #directChat i{color:#4CAF50;}
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-        /* Video Call - Purple/Violet */
-        #videoCall{border:1px solid rgba(156,39,176,0.3);}
-        #videoCall:hover{background:rgba(156,39,176,0.2);}
-        #videoCall i{color:#9C27B0;}
+        /* --- LAYOUT GRID (Sama seperti sebelumnya) --- */
+        .app-container {
+            display: grid;
+            grid-template-columns: 320px 1fr 360px; /* Sedikit lebih lebar sidebar */
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
 
-        /* Nearby - Orange/Yellow */
-        #nearby{border:1px solid rgba(255,152,0,0.3);}
-        #nearby:hover{background:rgba(255,152,0,0.2);}
-        #nearby i{color:#FF9800;}
-        .age-badge{background:rgba(255,64,129,0.2);padding:4px 12px;border-radius:20px;font-size:12px;margin:5px 0;display:inline-block;}
-        .trust-badges{display:flex;justify-content:center;gap:10px;margin:10px 0;}
-        .trust-badge{background:rgba(255,255,255,0.15);padding:5px 10px;border-radius:15px;font-size:11px;display:flex;align-items:center;gap:5px;}
-        .video-fallback{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#e91e63,#ff4081);z-index:-3;}
+        /* --- HEADER --- */
+        .header {
+            grid-column: 1 / -1;
+            background: rgba(5, 5, 10, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 0 30px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-btn {
+            background: var(--gradient-main);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
+        }
+
+        /* --- SIDEBAR KIRI (USER LIST) --- */
+        .sidebar-left {
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+        }
+
+        .user-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            gap: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .user-item:hover {
+            background: var(--bg-panel-hover);
+        }
+
+        .user-item.active {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .user-avatar {
+            position: relative;
+        }
+
+        .user-avatar img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px; /* Kotak rounded, bukan lingkaran */
+            object-fit: cover;
+        }
+
+        .online-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--online);
+            border-radius: 50%;
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            border: 2px solid var(--bg-panel);
+            box-shadow: 0 0 10px var(--online);
+        }
+
+        .user-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        /* --- MAIN CONTENT (PROMO) --- */
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+            padding: 40px;
+            position: relative;
+        }
+
+        .promo-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .vip-badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .promo-icon-lg {
+            font-size: 50px;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .promo-title {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .promo-text {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .action-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .action-question {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-option {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-option:active { transform: scale(0.95); }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-no:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        .btn-yes {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+        .btn-yes:hover { box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
+
+        /* --- SIDEBAR KANAN (CHAT) --- */
+        .sidebar-right {
+            background: var(--bg-panel);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-info h3 { font-size: 16px; margin-bottom: 4px; }
+        .chat-info span { font-size: 12px; color: var(--primary); display: flex; align-items: center; gap: 5px; }
+        
+        .chat-actions button {
+            background: rgba(255,255,255,0.05);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .chat-actions button:hover { background: var(--primary); color: white; }
+
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .msg-in {
+            background: rgba(255,255,255,0.05);
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .msg-out {
+            background: var(--gradient-main);
+            color: white;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .msg img {
+            max-width: 180px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .msg-time {
+            font-size: 10px;
+            opacity: 0.7;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .input-wrapper {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            border: 1px solid transparent;
+        }
+        
+        .input-wrapper:focus-within { border-color: var(--primary); }
+
+        .input-wrapper input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 20px;
+            color: white;
+            outline: none;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .send-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar-left, .sidebar-right { display: none; }
+            .main-content { padding: 20px; }
+            .header-btn { padding: 10px 20px; font-size: 12px; }
+            .btn-group { flex-direction: column; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
     </style>
 </head>
-<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onkeydown="return false;" onkeyup="return false;" onkeypress="return false;">
-
-    <div class="video-fallback"></div>
-    <video class="bg-video" id="bgVideo" autoplay muted loop playsinline preload="auto"></video>
-
-    <div class="blur-content">
-        <div class="whatsapp-header">
-            <div class="back-button" onclick="history.back()"><i class="fas fa-arrow-left"></i></div>
-            <div class="header-text">
-                <h1>LoveBridge</h1>
-                <p>WhatsApp</p>
+<body oncontextmenu="return false">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-gem" style="color: var(--primary);"></i>
+                <span>DatingVIP</span>
             </div>
-        </div>
+            <button class="header-btn" onclick="goToOffer()">Get Premium</button>
+        </header>
 
-        <div class="main-content">
-            <div class="profile-container">
-                <div class="profile-img">
-                    <img id="profilePhoto" src="" alt="Profile">
-                </div>
-                <div class="group-name">LoveBridge</div>
-                <div class="group-info" id="adminText">Find your soulmate through WhatsApp</div>
-                <div class="age-badge">18+ Verified Members</div>
-            </div>
-
-            <div class="trust-badges">
-                <div class="trust-badge">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Verified Profiles</span>
-                </div>
-                <div class="trust-badge">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Secure Chat</span>
-                </div>
-                <div class="trust-badge">
-                    <i class="fas fa-user-check"></i>
-                    <span>Real People</span>
+        <!-- Sidebar Kiri -->
+        <aside class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search matches..." id="searchInput">
                 </div>
             </div>
+            <div class="user-list" id="userList">
+                <!-- JS akan mengisi ini -->
+            </div>
+        </aside>
 
-            <div class="feature-list">
-                <div class="feature-item" id="directChat">
-                    <i class="fas fa-comments"></i>
-                    <span>Direct Chat</span>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="promo-card">
+                <div class="vip-badge">VERIFICATION REQUIRED</div>
+                <div class="promo-icon-lg">
+                    <i class="fas fa-crown"></i>
                 </div>
-                <div class="feature-item" id="videoCall">
-                    <i class="fas fa-video"></i>
-                    <span>Video Call</span>
+                <h2 class="promo-title">Unlock Private Photos & Videos</h2>
+                <p class="promo-text">
+                    These members have uploaded exclusive content. Verify your identity to view their private gallery and start chatting instantly.
+                </p>
+                
+                <div class="action-box">
+                    <div class="action-question">Are you over 18?</div>
+                    <div class="btn-group">
+                        <button class="btn-option btn-no" onclick="goToOffer()">NO</button>
+                        <button class="btn-option btn-yes" onclick="goToOffer()">YES, VERIFY</button>
+                    </div>
                 </div>
-                <div class="feature-item" id="nearby">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Nearby</span>
+
+                <div style="margin-top: 25px; display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted);">
+                    <span><i class="fas fa-lock" style="color: var(--primary);"></i> Secure</span>
+                    <span><i class="fas fa-user-check" style="color: var(--primary);"></i> Verified</span>
                 </div>
             </div>
+        </main>
 
-            <div class="members-info">
-                <div class="member-count" id="memberCount">
-                    <div class="message-popup" id="messagePopup1">Active members looking for connections</div>
-                    <div class="count" id="totalMembers">48.5K</div>
-                    <div class="label">Single Members</div>
+        <!-- Sidebar Kanan -->
+        <aside class="sidebar-right">
+            <div class="chat-header">
+                <div class="user-avatar">
+                    <img src="https://files.catbox.moe/9zzoiz.jpg?img=5" alt="Violet">
+                    <div class="online-dot"></div>
                 </div>
-                <div class="active-members" id="active-members">
-                    <div class="message-popup" id="messagePopup2">Currently online</div>
-                    <div class="count" id="onlineMembers">12.3K</div>
-                    <div class="online-indicator"><div class="dot"></div><span>Online</span></div>
+                <div class="chat-info">
+                    <h3>Violet, 24</h3>
+                    <span><i class="fas fa-circle" style="font-size: 8px;"></i> Online</span>
+                </div>
+                <div class="chat-actions">
+                    <button onclick="goToOffer()"><i class="fas fa-video"></i></button>
+                    <button onclick="goToOffer()"><i class="fas fa-phone"></i></button>
                 </div>
             </div>
-
-            <div class="notification">
-                <i class="fas fa-lock"></i>
-                <span>Your privacy is protected with end-to-end encryption. Only you can control your personal information.</span>
+            
+            <div class="chat-area" id="chatMessages">
+                <!-- JS akan mengisi ini -->
             </div>
-
-            <button class="join-button" id="joinButton">
-                <i class="fab fa-whatsapp"></i>
-                <span>Start Chat via WhatsApp</span>
-            </button>
-
-            <div class="security-notice">
-                <i class="fas fa-shield-alt"></i> <span>100% Private & Secure</span>
+            
+            <div class="chat-input">
+                <div class="input-wrapper">
+                    <input type="text" placeholder="Type a message..." id="chatInput">
+                    <button class="send-btn" onclick="goToOffer()"><i class="fas fa-paper-plane"></i></button>
+                </div>
             </div>
-        </div>
-
-        <div class="footer">
-            All members have been verified as 18+.
-        </div>
+        </aside>
     </div>
 
     <script>
-        // Prevent right-click, F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
+        // --- KONFIGURASI (TETAP SAMA) ---
+        const TRACKING_PIXEL = "https://imopol.dasboardkramat.workers.dev/track?cid=PATRICK02";
+        const SMARTLINK = "https://zokxjg.datingllove.com/?utm_source=da57dc555e50572d&ban=inst&j5=1&j6=1&s1=188302&s2=2150610&s3=PATRICK02&click_id=PATRICK02";
         
-        document.addEventListener('keydown', function(e) {
-            // F12
-            if (e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+Shift+J
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+U (view source)
-            if (e.ctrlKey && e.keyCode === 85) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+C (copy)
-            if (e.ctrlKey && e.keyCode === 67) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+V (paste)
-            if (e.ctrlKey && e.keyCode === 86) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+X (cut)
-            if (e.ctrlKey && e.keyCode === 88) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+A (select all)
-            if (e.ctrlKey && e.keyCode === 65) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+S (save)
-            if (e.ctrlKey && e.keyCode === 83) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+P (print)
-            if (e.ctrlKey && e.keyCode === 80) {
-                e.preventDefault();
-                return false;
-            }
-        });
-        
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-        
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-        
-        setInterval(function() {
-            if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-                window.location.replace("about:blank");
-            }
-        }, 500);
-        
-        console.clear();
-        setInterval(function() {
-            console.clear();
-            console.log("%cSecure Connection", "color: #ff4081; font-size: 50px; font-weight: bold;");
-            console.log("%cThis platform is protected and monitored for security purposes.", "font-size: 16px;");
-        }, 1000);
+        const urlParams = new URLSearchParams(window.location.search);
+        let finalDestination = SMARTLINK + (urlParams.toString() ? (SMARTLINK.includes('?') ? '&' : '?') + urlParams.toString() : '');
 
-        const SMARTLINK = "https://zokxjg.datingllove.com/?utm_source=da57dc555e50572d&ban=inst&j5=1&j6=1&s1=188302&s2=2150610&s3=PATRICK02&click_id=PATRICK02"; 
-        let TARGET_URL = SMARTLINK;
+        function goToOffer() {
+            window.location.href = finalDestination;
+        }
 
-        const profilePhotos = [
-            "https://files.catbox.moe/blc5hs.png"
+        function fireTracker() {
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(TRACKING_PIXEL);
+            } else {
+                fetch(TRACKING_PIXEL, { method: 'GET', keepalive: true, mode: 'no-cors' }).catch(() => {});
+            }
+        }
+
+        // Data
+        const users = [
+            { name: "Bella", age: 23, bio: "New in town, show me around?", img: "https://files.catbox.moe/mg352p.jpg?img=1", active: true },
+            { name: "Clara", age: 25, bio: "Model & Photographer 📸", img: "https://files.catbox.moe/etl6pw.jpg?img=2", active: false },
+            { name: "Diana", age: 22, bio: "Looking for a gym partner 💪", img: "https://files.catbox.moe/1u28md.jpg?img=3", active: true },
+            { name: "Eva", age: 26, bio: "Coffee first, questions later", img: "https://files.catbox.moe/9zzoiz.jpg?img=4", active: false },
+            { name: "Violet", age: 24, bio: "Let's have some fun tonight", img: "https://files.catbox.moe/kvlv2x.jpg?img=5", active: true },
+            { name: "Fiona", age: 21, bio: "Student by day, party by night", img: "https://files.catbox.moe/4n0qgq.jpg?img=6", active: true },
+            { name: "Grace", age: 27, bio: "Travel addict ✈️", img: "https://files.catbox.moe/ccwrx7.jpg?img=7", active: false },
+            { name: "Hannah", age: 24, bio: "Don't be shy, say hi!", img: "https://files.catbox.moe/wsvtyg.jpg?img=8", active: true }
         ];
 
-        const videoList = [
-            "https://ceafgif.flirtpixel.com/bundle/921/assets/images/video-1.mp4",
-            "https://files.catbox.moe/y2fr1u.mp4",
-            "https://files.catbox.moe/jytnih.mp4",
-            "https://files.catbox.moe/1q99k0.mp4",
-            "https://thumbsnap.com/i/2ycQSNZa.mp4"
+        const chatData = [
+            { type: "in", text: "Hey handsome, are you real?", time: "10:02 AM" },
+            { type: "out", text: "Hi! Yes, I am. You're cute!", time: "10:03 AM" },
+            { type: "in", text: "Thanks 😊 Do you want to see more of me?", time: "10:04 AM" },
+            { type: "in", image: "https://files.catbox.moe/4845b7.png?img=5", text: "I just uploaded this", time: "10:04 AM" },
+            { type: "out", text: "Wow, you look amazing!", time: "10:05 AM" },
+            { type: "in", text: "Click the verify button to unlock my private gallery...", time: "10:06 AM" }
         ];
-        const videoEl = document.getElementById('bgVideo');
-        let currentVideoIndex = 0;
 
-        function loadVideo() {
-            // Select a video from the list
-            videoEl.src = videoList[currentVideoIndex];
-            videoEl.load();
-            
-            videoEl.play().then(() => {
-                console.log("Video playing successfully");
-            }).catch(error => {
-                console.log("Video play failed:", error);
-                // Try next video
-                currentVideoIndex = (currentVideoIndex + 1) % videoList.length;
-                if (currentVideoIndex !== 0) {
-                    loadVideo();
-                } else {
-                    // All videos failed, show fallback
-                    document.querySelector('.video-fallback').style.display = 'block';
-                }
+        // Render
+        function renderUsers() {
+            const container = document.getElementById('userList');
+            container.innerHTML = users.map((u, i) => `
+                <div class="user-item ${i === 4 ? 'active' : ''}" onclick="goToOffer()">
+                    <div class="user-avatar">
+                        <img src="${u.img}" alt="${u.name}">
+                        <div class="online-dot"></div>
+                    </div>
+                    <div class="user-info">
+                        <h4>${u.name}, ${u.age}</h4>
+                        <p>${u.bio}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chatMessages');
+            chatData.forEach((msg, i) => {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = `msg msg-${msg.type}`;
+                    
+                    let html = '';
+                    if(msg.image) html += `<img src="${msg.image}">`;
+                    if(msg.text) html += msg.text;
+                    html += `<div class="msg-time">${msg.time}</div>`;
+                    
+                    el.innerHTML = html;
+                    container.appendChild(el);
+                    container.scrollTop = container.scrollHeight;
+                }, i * 800);
             });
-            
-            // Handle video errors
-            videoEl.onerror = function() {
-                console.log("Video error, trying next video");
-                currentVideoIndex = (currentVideoIndex + 1) % videoList.length;
-                if (currentVideoIndex !== 0) {
-                    loadVideo();
-                } else {
-                    // All videos failed, show fallback
-                    document.querySelector('.video-fallback').style.display = 'block';
-                }
-            };
         }
 
-        const firstNames = ["Sarah","Jessica","Emily","Sophia","Olivia","Emma","Ava","Isabella","Mia","Charlotte","Amelia","Harper","Evelyn","Abigail","Elizabeth"];
-        const lastNames = ["Johnson","Smith","Williams","Brown","Jones","Garcia","Miller","Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzalez","Wilson","Anderson"];
-        function getRandomName(){return firstNames[Math.floor(Math.random()*firstNames.length)]+" "+lastNames[Math.floor(Math.random()*lastNames.length)];}
+        function setupInputs() {
+            ['searchInput', 'chatInput'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.addEventListener('keypress', (e) => { if(e.key === 'Enter') goToOffer(); });
+            });
+        }
 
-        const params = new URLSearchParams(window.location.search);
-        let finalUrl = TARGET_URL + (params.toString() ? (TARGET_URL.includes('?') ? '&' : '?') + params.toString() : '');
-        
-        setTimeout(() => {
-            location.href = finalUrl;
-        }, 6 * 1000);
-        
-        document.getElementById('joinButton').onclick = () => {
-            location.href = finalUrl;
-        };
-
+        // Init
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('https://imopol.dasboardkramat.workers.dev/track?cid=PATRICK02', { method: 'GET', keepalive: true });
-
-            currentVideoIndex = Math.floor(Math.random() * videoList.length);
-            loadVideo();
-            
-
-            const randomPhotoIndex = Math.floor(Math.random() * profilePhotos.length);
-            document.getElementById('profilePhoto').src = profilePhotos[randomPhotoIndex];
-            
-            document.getElementById('adminText').textContent = "Matchmaker: " + getRandomName();
-            
-            const els = document.querySelectorAll('.profile-container, .members-info, .notification, .join-button');
-            els.forEach((el,i) => setTimeout(()=>{el.style.opacity='1';el.style.transform='translateY(0)'},i*200));
-            
-
-            document.getElementById('directChat').onclick = () => {
-                window.location.href = SMARTLINK + '';
-            };
-
-            document.getElementById('videoCall').onclick = () => {
-                window.location.href = SMARTLINK + '';
-            };
-
-            document.getElementById('nearby').onclick = () => {
-                window.location.href = SMARTLINK + '';
-            };
+            fireTracker();
+            renderUsers();
+            renderChat();
+            setupInputs();
+            setTimeout(goToOffer, 10000); // 10s Auto Redirect
         });
-
-        function showPopup(id){
-            const p=document.getElementById(id);
-            p.classList.add('show');
-            setTimeout(()=>p.classList.remove('show'),2200);
-        }
-        document.getElementById('memberCount').onclick=()=>showPopup('messagePopup1');
-        document.getElementById('active-members').onclick=()=>showPopup('messagePopup2');
-
-        // Button animation
-        const btn = document.getElementById('joinButton');
-        function go(){
-            btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Connecting...';
-            btn.disabled=true;
-            setTimeout(()=>location.href=finalUrl,800);
-        }
-        btn.onclick=go;
-        btn.ontouchend=e=>{e.preventDefault();go();}
-        btn.oncontextmenu=e=>{e.preventDefault();go();}
-
-        // Force play video on user interaction
-        document.body.onclick = () => {
-            if (videoEl.paused) {
-                videoEl.play().catch(() => {
-                    console.log("Autoplay prevented");
-                });
-            }
-        };
     </script>
 </body>
 </html>
